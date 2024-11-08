@@ -1,0 +1,44 @@
+name: 'Lint and Test project'
+
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'acceptance'
+      - 'main'
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+      - synchronize
+  workflow_dispatch:
+
+jobs:
+  run_linters:
+    name: 'Lint and Test'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: 'lint'
+            command: 'run lint'
+          - name: 'test'
+            command: 'run test'
+
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: '"${{ matrix.name }}" the project'
+        uses: ./.github/actions/npmCommand
+        with:
+          name: ${{ matrix.name }}
+          command: ${{ matrix.command }}

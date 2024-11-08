@@ -1,0 +1,29 @@
+name: 'Run a `NPM` command in the repository'
+description: 'Run `NPM` commands'
+
+inputs:
+  name:
+    required: true
+    description: 'Name of the command'
+  command:
+    required: true
+    description: 'The `NPM` command that we want to run'
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: 'Setup node'
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache-dependency-path: '**/package-lock.json'
+
+    # See https://github.com/npm/cli/issues/564#issuecomment-921154118
+    - name: 'Install node dependencies'
+      shell: bash
+      run: npm ci
+
+    - name: 'Run "${{ inputs.name }}"'
+      shell: bash
+      run: npm ${{ inputs.command }}
