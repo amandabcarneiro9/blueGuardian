@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import Index from './Index';
+import Index from '../app/index';
 
 describe('Index Component', () => {
 	it('renders the text "BlueGuardian"', () => {
@@ -11,7 +11,7 @@ describe('Index Component', () => {
 	it.skip('applies the correct styles', () => {
 		const { getByText } = render(<Index />);
 		const textElement = getByText('BlueGuardian');
-		expect(textElement.parent.props.style).toEqual(
+		expect(textElement.parent?.props?.style).toEqual(
 			expect.objectContaining({
 				justifyContent: 'center',
 				alignItems: 'center',
